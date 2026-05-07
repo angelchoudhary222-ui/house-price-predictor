@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>House Price Predictor</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #a857ea;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 750px;
+            margin: 70px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: scale(1.02);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        p {
+            text-align: center;
+            color: #434242;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 13px;
+            color: #555;
+        }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        input, select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: #a857ea;
+            color: #ffffff;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #c081fd;
+            transform: translateY(-2px);
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f4ff;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .loading {
+            text-align: center;
+            margin-top: 10px;
+            display: none;
+            color: #555;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: gray;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 700px) {
+            .container {
+                width: 90%;
+            }
+
+            .grid-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .grid-3 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>🏠 House Price Predictor</h1>
+    <p>Enter property details to estimate price</p>
+
+    <form action="/predict" method="post" autocomplete="off" onsubmit="showLoading()">
+
+        <div class="grid-4">
+            <div>
+                <label>Area (sq ft)</label>
+                <input type="number" name="area" min="500" max="30000" required>
+            </div>
+
+            <div>
+                <label>Bedrooms</label>
+                <input type="number" name="bedrooms" min="1" max="8" required>
+            </div>
+
+            <div>
+                <label>Bathrooms</label>
+                <input type="number" name="bathrooms" min="1" max="6" required>
+            </div>
+
+            <div>
+                <label>Stories</label>
+                <input type="number" name="stories" min="1" max="6" required>
+            </div>
+        </div>
+
+        <div class="grid-3">
+            <select name="mainroad" required>
+                <option value="" disabled selected>Main Road</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <select name="guestroom" required>
+                <option value="" disabled selected>Guest Room</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <select name="basement" required>
+                <option value="" disabled selected>Basement</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+
+        <div class="grid-3">
+            <select name="hotwaterheating" required>
+                <option value="" disabled selected>Hot Water Heating</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <select name="airconditioning" required>
+                <option value="" disabled selected>Air Conditioning</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <input type="number" name="parking" placeholder="Parking" min="0" max="6" required>
+        </div>
+
+        <div class="grid-3">
+            <select name="prefarea" required>
+                <option value="" disabled selected>Near City Center</option>
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+
+            <select name="furnishingstatus" required>
+                <option value="" disabled selected>Furnishing</option>
+                <option value="furnished">Furnished</option>
+                <option value="semi-furnished">Semi</option>
+                <option value="unfurnished">Unfurnished</option>
+            </select>
+        </div>
+
+        <button type="submit">Predict Price</button>
+      <button type="reset" onclick="hideLoading()" style="background:#ccc; color:black;">
+    Clear
+</button>
+        <p id="loading" class="loading" style="display:none;">Calculating price...</p>
+    </form>
+
+    {% if prediction_text %}
+    <div class="result">
+        {{ prediction_text }}
+    </div>
+    {% endif %}
+
+    {% if graph_url %}
+<div style="margin-top:20px; text-align:center;">
+    <h3>📊 Model Insights</h3>
+    <img src="{{ url_for('static', filename='graph.png') }}" width="100%" style="border-radius:10px;">
+</div>
+{% endif %}
+
+</div>
+
+<script>
+function showLoading() {
+    document.getElementById("loading").style.display = "block";
+}
+
+function hideLoading() {
+    document.getElementById("loading").style.display = "none";
+}
+
+window.onload = function() {
+    document.getElementById("loading").style.display = "none";
+};
+</script>
+
+</body>
+</html>
