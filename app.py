@@ -1,121 +1,152 @@
 from flask import Flask, render_template, request
 import pickle
 import pandas as pd
-import matplotlib.pyplot as plt
-import os
-import numpy as np
 
 app = Flask(__name__)
 
 model = pickle.load(open("model.pkl", "rb"))
 
+# ---------------------------
+# City Boost System
+# ---------------------------
+def city_price_boost(city):
+    if city == "Delhi":
+        return 1.25
+    elif city == "Jaipur":
+        return 1.10
+    elif city == "Alwar":
+        return 0.90
+    return 1.0
+
+
+# ---------------------------
+# REAL SOCIETY DATABASE
+# ---------------------------
+SOCIETY_DB = {
+
+    "Delhi": [
+        {"name": "DLF Capital Greens", "base_price": 18000000, "facilities": ["Gym", "Pool", "Metro Nearby"]},
+        {"name": "ATS One Hamlet", "base_price": 15000000, "facilities": ["Club House", "Security", "Park"]},
+        {"name": "Godrej South Estate", "base_price": 12000000, "facilities": ["Green Area", "Gym", "Security"]},
+        {"name": "RWA Dwarka Homes", "base_price": 8500000, "facilities": ["Lift", "Security"]},
+        {"name": "Metro View Apartments", "base_price": 7500000, "facilities": ["Parking", "Park"]},
+        {"name": "Delhi Heights", "base_price": 9500000, "facilities": ["Gym", "Club House"]},
+        {"name": "Sunshine Residency", "base_price": 6500000, "facilities": ["Security", "Garden"]}
+    ],
+
+    "Jaipur": [
+        {"name": "Mahima Panorama", "base_price": 9000000, "facilities": ["Garden", "Gym", "Security"]},
+        {"name": "Ashiana Umang", "base_price": 7000000, "facilities": ["Club House", "Pool", "Park"]},
+        {"name": "Manglam Aroma", "base_price": 6000000, "facilities": ["Parking", "Security", "Lift"]},
+        {"name": "Royal Greens Jaipur", "base_price": 5000000, "facilities": ["Gym", "Security"]},
+        {"name": "Pink City Homes", "base_price": 4500000, "facilities": ["Garden", "Parking"]},
+        {"name": "Jaipur Residency", "base_price": 8000000, "facilities": ["Pool", "Club House"]}
+    ],
+
+    "Alwar": [
+        {"name": "Krish City Heights", "base_price": 4000000, "facilities": ["Park", "Security"]},
+        {"name": "Trehan Hill View", "base_price": 3500000, "facilities": ["Gym", "Parking"]},
+        {"name": "R Tech Capital Greens Alwar", "base_price": 5000000, "facilities": ["Club House", "Security", "Garden"]},
+        {"name": "Alwar Residency", "base_price": 3000000, "facilities": ["Parking", "Security"]},
+        {"name": "Hill View Homes", "base_price": 4500000, "facilities": ["Garden", "Lift"]},
+        {"name": "Smart City Alwar", "base_price": 5500000, "facilities": ["Gym", "Park"]}
+    ]
+}
+
+def get_societies(city, predicted_price):
+
+    societies = []
+
+    for s in SOCIETY_DB.get(city, []):
+
+        price = s["base_price"]
+
+        # wider matching
+        if price >= predicted_price * 0.5 and price <= predicted_price * 1.8:
+
+            societies.append({
+                "name": s["name"],
+                "city": city,
+                "avg_price": int(price),
+                "facilities": s["facilities"]
+            })
+
+    # if less than 3 societies found
+    if len(societies) < 3:
+
+        for s in SOCIETY_DB.get(city, []):
+
+            exists = any(x["name"] == s["name"] for x in societies)
+
+            if not exists:
+                societies.append({
+                    "name": s["name"],
+                    "city": city,
+                    "avg_price": int(s["base_price"]),
+                    "facilities": s["facilities"]
+                })
+
+            if len(societies) >= 4:
+                break
+
+    societies.sort(key=lambda x: x["avg_price"])
+
+    return societies
+
+
+# ---------------------------
+# Routes
+# ---------------------------
 @app.route('/')
 def home():
-    return render_template("index.html", prediction_text=None)
+    return render_template("index.html")
 
 
 @app.route('/predict', methods=['POST'])
 def predict():
+    try:
+        city = request.form["city"]
 
-    input_data = {
-        "area": float(request.form["area"]),
-        "bedrooms": int(request.form["bedrooms"]),
-        "bathrooms": int(request.form["bathrooms"]),
-        "stories": int(request.form["stories"]),
-        "mainroad": request.form["mainroad"],
-        "guestroom": request.form["guestroom"],
-        "basement": request.form["basement"],
-        "hotwaterheating": request.form["hotwaterheating"],
-        "airconditioning": request.form["airconditioning"],
-        "parking": int(request.form["parking"]),
-        "prefarea": request.form["prefarea"],
-        "furnishingstatus": request.form["furnishingstatus"]
-    }
+        input_data = {
+            "area": float(request.form["area"]),
+            "bedrooms": int(request.form["bedrooms"]),
+            "bathrooms": int(request.form["bathrooms"]),
+            "stories": int(request.form["stories"]),
+            "mainroad": request.form["mainroad"],
+            "guestroom": request.form["guestroom"],
+            "basement": request.form["basement"],
+            "hotwaterheating": request.form["hotwaterheating"],
+            "airconditioning": request.form["airconditioning"],
+            "parking": int(request.form["parking"]),
+            "prefarea": request.form["prefarea"],
+            "furnishingstatus": request.form["furnishingstatus"]
+        }
 
-    df = pd.DataFrame([input_data])
+        df = pd.DataFrame([input_data])
+        prediction = model.predict(df)[0]
 
-    prediction = model.predict(df)
+        # 🔥 FIX 3: clamp unrealistic values
+        # Better prediction balancing
+        if prediction > 30000000:
+            prediction *= 0.45
+        elif prediction > 20000000:
+            prediction *= 0.60
+        elif prediction < 1000000:
+            prediction *= 1.5
+        societies = get_societies(city, prediction)
 
-    # ---------------- GRAPH ----------------
-    os.makedirs("static", exist_ok=True)
-
-    features = ["area", "bedrooms", "bathrooms", "stories", "parking"]
-
-    values_norm = np.array([
-        input_data["area"] / 10000,
-        input_data["bedrooms"] / 10,
-        input_data["bathrooms"] / 10,
-        input_data["stories"] / 5,
-        input_data["parking"] / 5
-    ])
-
-    plt.figure(figsize=(10, 5))
-
-    # -------- LEFT GRAPH --------
-    plt.subplot(1, 2, 1)
-    bars1 = plt.bar(features, values_norm)
-    plt.title("Input Features (Balanced Scale)")
-    plt.xticks(rotation=30)
-    plt.ylim(0, 1.1)
-
-    for bar in bars1:
-        height = bar.get_height()
-        plt.text(
-            bar.get_x() + bar.get_width() / 2,
-            height,
-            f'{height:.2f}',
-            ha='center',
-            va='bottom'
+        return render_template(
+            "index.html",
+            prediction_text=f"₹ {int(prediction):,}",
+            societies=societies
         )
 
-    # -------- RIGHT GRAPH --------
-    plt.subplot(1, 2, 2)
-
-    importance = None
-
-    try:
-        importance = abs(model.named_steps['model'].coef_)
-    except:
-        try:
-            importance = abs(model.coef_)
-        except:
-            try:
-                importance = model.feature_importances_
-            except:
-                importance = None
-
-    if importance is not None:
-        importance = importance[:len(features)]
-        importance = importance / (importance.max() + 1e-6)
-
-        bars2 = plt.bar(features, importance)
-        plt.title("Feature Impact (Relative)")
-        plt.xticks(rotation=30)
-        plt.ylim(0, 1.1)
-
-        for bar in bars2:
-            height = bar.get_height()
-            plt.text(
-                bar.get_x() + bar.get_width() / 2,
-                height,
-                f'{height:.2f}',
-                ha='center',
-                va='bottom'
-            )
-    else:
-        plt.text(0.5, 0.5, "Importance not available", ha='center')
-
-    plt.tight_layout()
-
-    graph_path = os.path.join("static", "graph.png")
-    plt.savefig(graph_path)
-    plt.close()
-
-    return render_template(
-        "index.html",
-        prediction_text=f"Predicted Price: ₹ {int(prediction[0]):,}",
-        graph_url="graph.png"
-    )
+    except Exception as e:
+        return render_template(
+            "index.html",
+            prediction_text=f"Error: {str(e)}",
+            societies=None
+        )
 
 
 if __name__ == "__main__":
