@@ -6,18 +6,20 @@ model = pickle.load(open("model.pkl", "rb"))
 
 st.title("🏠 House Price Predictor")
 
-area = st.number_input("Area")
-bedrooms = st.number_input("Bedrooms")
-bathrooms = st.number_input("Bathrooms")
-stories = st.number_input("Stories")
+area = st.number_input("Area", min_value=500, step=1)
 
+bedrooms = st.number_input("Bedrooms", min_value=1, step=1)
+
+bathrooms = st.number_input("Bathrooms", min_value=1, step=1)
+
+stories = st.number_input("Stories", min_value=1, step=1)
+
+parking = st.number_input("Parking", min_value=0, step=1)
 mainroad = st.selectbox("Main Road", ["yes", "no"])
 guestroom = st.selectbox("Guest Room", ["yes", "no"])
 basement = st.selectbox("Basement", ["yes", "no"])
 hotwaterheating = st.selectbox("Hot Water Heating", ["yes", "no"])
 airconditioning = st.selectbox("Air Conditioning", ["yes", "no"])
-
-parking = st.number_input("Parking")
 
 prefarea = st.selectbox("Near City Center", ["yes", "no"])
 
