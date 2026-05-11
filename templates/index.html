@@ -5,82 +5,162 @@
 <title>House Price Predictor</title>
 
 <style>
-body {
+
+body{
     font-family: Arial;
-    background: #a857ea;
-    margin: 0;
+    background: #aa6ee1;
+    margin:0;
+    padding:20px;
 }
 
-.container {
-    width: 750px;
-    margin: 70px auto;
-    background: white;
-    padding: 40px;
-    border-radius: 20px;
+.container{
+    max-width:1200px;
+    margin:auto;
+    background:white;
+    padding:40px;
+    border-radius:20px;
 }
 
-h1 { text-align: center; }
+h1{
+    text-align:center;
+    color:#5b21b6;
+}
 
 .grid-4,
-.grid-3 {
-    display: grid;
-    gap: 10px;
-    margin-top: 15px;
-    margin-bottom: 15px;
+.grid-3{
+    display:grid;
+    gap:10px;
+    margin-top:15px;
+    margin-bottom:15px;
 }
 
-.grid-4 {
-    grid-template-columns: repeat(4, 1fr);
+.grid-4{
+    grid-template-columns:repeat(4,1fr);
 }
 
-.grid-3 {
-    grid-template-columns: repeat(3, 1fr);
+.grid-3{
+    grid-template-columns:repeat(3,1fr);
 }
 
 input,
-select {
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    margin-bottom: 8px;
+select{
+    padding:12px;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:14px;
 }
 
-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    background: #a857ea;
-    color: white;
-    border: none;
-    border-radius: 10px;
+button{
+    width:100%;
+    padding:14px;
+    margin-top:10px;
+    background:#8b5cf6;
+    color:white;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:15px;
+    transition:0.3s;
 }
 
-button:hover {
-    background: #c081fd;
+button:hover{
+    background:#7c3aed;
 }
 
-.reset-btn {
-    background: #ccc;
-    color: black;
+.reset-btn{
+    background:#ddd;
+    color:black;
 }
 
-.card {
-    background: #f7f5ff;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
+.dashboard{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+    margin-top:20px;
 }
 
-.dashboard {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+.card{
+    background:#f8f5ff;
+    border-radius:18px;
+    overflow:hidden;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+    transition:0.3s;
 }
 
-.society-title {
-    text-align: center;
-    margin-top: 20px;
+.card:hover{
+    transform:translateY(-5px);
 }
+
+.card img{
+    width:100%;
+    height:190px;
+    object-fit:cover;
+}
+
+.card-content{
+    padding:18px;
+}
+
+.price{
+    color:#6d28d9;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.address{
+    color:gray;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.facility{
+    background:#ede9fe;
+    display:inline-block;
+    padding:6px 10px;
+    border-radius:20px;
+    margin:4px;
+    font-size:12px;
+}
+
+.map-btn{
+    display:inline-block;
+    margin-top:14px;
+    padding:10px 16px;
+    background:#8b5cf6;
+    color:white;
+    border-radius:10px;
+    text-decoration:none;
+}
+
+.map-btn:hover{
+    background:#7c3aed;
+}
+
+.section-title{
+    margin-top:15px;
+    color:#5b21b6;
+    font-size:15px;
+}
+
+ul{
+    padding-left:18px;
+}
+
+@media(max-width:768px){
+
+    .grid-4{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .grid-3{
+        grid-template-columns:1fr;
+    }
+
+    .container{
+        padding:20px;
+    }
+}
+
 </style>
 </head>
 
@@ -100,87 +180,182 @@ button:hover {
 </select>
 
 <div class="grid-4">
-    <input name="area" type="number" placeholder="Area" min="500" max="30000" required>
-    <input name="bedrooms" type="number" placeholder="Bedrooms" min="1" max="10" required>
-    <input name="bathrooms" type="number" placeholder="Bathrooms" min="1" max="6" required>
-    <input name="stories" type="number" placeholder="Stories" min="1" max="6" required>
+
+<input name="area" type="number" placeholder="Area" min="600" max="30000"required>
+
+<input name="bedrooms" type="number" placeholder="Bedrooms" min="1" max="10" required>
+
+<input name="bathrooms" type="number" placeholder="Bathrooms" min="1" max="6" required>
+
+<input name="stories" type="number" placeholder="Stories" min="1" max="6" required>
+
 </div>
 
 <div class="grid-3">
-    <select name="mainroad">
-        <option disabled selected>Main Road</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-    </select>
 
-    <select name="guestroom">
-        <option disabled selected>Guest Room</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-    </select>
+<select name="mainroad">
+<option disabled selected>Main Road</option>
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
 
-    <select name="basement">
-        <option disabled selected>Basement</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-    </select>
+<select name="guestroom">
+<option disabled selected>Guest Room</option>
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
+
+<select name="basement">
+<option disabled selected>Basement</option>
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
+
 </div>
 
 <div class="grid-3">
-    <select name="hotwaterheating">
-        <option disabled selected>Hot Water Heating</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-    </select>
 
-    <select name="airconditioning">
-        <option disabled selected>Air Conditioning</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-    </select>
+<select name="hotwaterheating">
+<option disabled selected>Hot Water Heating</option>
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
 
-    <input type="number" name="parking" placeholder="Parking" min="0" max="6" required>
+<select name="airconditioning">
+<option disabled selected>Air Conditioning</option>
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
+
+<input type="number" name="parking" placeholder="Parking" min="0" max="6" required>
+
 </div>
 
 <div class="grid-3">
-    <select name="prefarea">
-        <option disabled selected>City Center</option>
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-    </select>
 
-    <select name="furnishingstatus">
-        <option disabled selected>Furnishing</option>
-        <option value="furnished">Furnished</option>
-        <option value="semi-furnished">Semi</option>
-        <option value="unfurnished">Unfurnished</option>
-    </select>
+<select name="prefarea">
+<option disabled selected>City Center</option>
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
+
+<select name="furnishingstatus">
+<option disabled selected>Furnishing</option>
+<option value="furnished">Furnished</option>
+<option value="semi-furnished">Semi Furnished</option>
+<option value="unfurnished">Unfurnished</option>
+</select>
+
 </div>
 
-<button type="submit">Predict Price</button>
-<button type="reset" class="reset-btn">Clear</button>
+<button type="submit">
+Predict Price
+</button>
+
+<button type="reset" class="reset-btn">
+Clear
+</button>
 
 </form>
 
 {% if prediction_text %}
-<div class="society-title">
+
+<h2 style="text-align:center;margin-top:25px;color:#5b21b6;">
     Predicted Price: {{ prediction_text }}
-</div>
+</h2>
+
 {% endif %}
 
 {% if societies %}
-<h3 class="society-title">🏢 Societies</h3>
+
+<h2 style="text-align:center;margin-top:30px;">
+    🏢 Recommended Societies
+</h2>
 
 <div class="dashboard">
+
 {% for s in societies %}
-    <div class="card">
-        <h3>{{ s.name }}</h3>
-        <p>{{ s.city }}</p>
-        <p>₹ {{ s.avg_price }}</p>
-        <small>{{ s.facilities | join(', ') }}</small>
-    </div>
+
+<div class="card">
+
+<img src="{{ s.image }}" alt="society image">
+
+<div class="card-content">
+
+<h3>{{ s.name }}</h3>
+
+<p class="price">
+₹ {{ "{:,}".format(s.avg_price) }}
+</p>
+
+<p>
+<b>City:</b> {{ s.city }}
+</p>
+
+<p class="address">
+{{ s.address }}
+</p>
+
+<div>
+
+{% for f in s.facilities %}
+
+<span class="facility">
+{{ f }}
+</span>
+
 {% endfor %}
+
 </div>
+
+<div class="section-title">
+<p><b>📚 Nearby Schools</b></p>
+
+<ul style="text-align:left; font-size:13px;">
+{% for school in s.schools %}
+<li>{{ school }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<ul>
+{% for school in s.schools %}
+<li>{{ school }}</li>
+{% endfor %}
+</ul>
+
+<div class="section-title">
+<p><b>🏥 Nearby Hospitals</b></p>
+
+<ul style="text-align:left; font-size:13px;">
+{% for hospital in s.hospitals %}
+<li>{{ hospital }}</li>
+{% endfor %}
+</ul>
+</div>
+
+<ul>
+{% for hospital in s.hospitals %}
+<li>{{ hospital }}</li>
+{% endfor %}
+</ul>
+
+<a
+href="{{ s.map_link }}"
+target="_blank"
+class="map-btn"
+>
+📍 View on Map
+</a>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+
 {% endif %}
 
 </div>
