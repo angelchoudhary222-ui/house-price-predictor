@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, url_for
 import pickle
 import pandas as pd
 import requests
@@ -18,28 +18,32 @@ SOCIETY_DB = {
             "name": "DLF Capital Greens",
             "base_price": 18000000,
             "facilities": ["Gym", "Pool", "Metro Nearby"],
-            "search": "Moti Nagar New Delhi"
+            "search": "Moti Nagar New Delhi",
+            "image": "societies/dlf_capital_greens.jpg"
         },
 
         {
             "name": "ATS One Hamlet",
             "base_price": 15000000,
             "facilities": ["Club House", "Security", "Park"],
-            "search": "Sector 104 Noida"
+            "search": "Sector 104 Noida",
+            "image": "societies/ats_one_hamlet.jpg"
         },
 
         {
             "name": "Godrej South Estate",
             "base_price": 12000000,
             "facilities": ["Green Area", "Gym", "Security"],
-            "search": "Okhla Delhi"
+            "search": "Okhla Delhi",
+            "image": "societies/godrej_south_estate.jpg"
         },
 
         {
             "name": "DLF New Town Heights",
             "base_price": 9500000,
             "facilities": ["Gym", "Club House"],
-            "search": "Sector 90 Gurgaon"
+            "search": "Sector 90 Gurgaon",
+            "image": "societies/dlf_new_town_heights.jpg"
         }
     ],
 
@@ -49,28 +53,32 @@ SOCIETY_DB = {
             "name": "Mahima Panorama",
             "base_price": 9000000,
             "facilities": ["Garden", "Gym", "Security"],
-            "search": "Jagatpura Jaipur"
+            "search": "Jagatpura Jaipur",
+            "image": "societies/mahima_panorama.jpg"
         },
 
         {
             "name": "Ashiana Umang",
             "base_price": 7000000,
             "facilities": ["Club House", "Pool", "Park"],
-            "search": "Tonk Road Jaipur"
+            "search": "Tonk Road Jaipur",
+            "image": "societies/ashiana_umang.jpg"
         },
 
         {
             "name": "Manglam Aroma",
             "base_price": 6000000,
             "facilities": ["Parking", "Security", "Lift"],
-            "search": "Mansarovar Jaipur"
+            "search": "Mansarovar Jaipur",
+            "image": "societies/manglam_aroma.jpg"
         },
 
         {
             "name": "Okay Plus Emerald",
             "base_price": 5000000,
             "facilities": ["Gym", "Security"],
-            "search": "Ajmer Road Jaipur"
+            "search": "Ajmer Road Jaipur",
+            "image": "societies/okay_plus_emerald.jpg"
         }
     ],
 
@@ -82,7 +90,8 @@ SOCIETY_DB = {
             "facilities": ["Gym", "Parking"],
             "address": "Sector 39, Bhiwadi, Rajasthan",
             "lat": "28.2105",
-            "lon": "76.8606"
+            "lon": "76.8606",
+            "image": "societies/ashiana_town.jpg"
         },
 
         {
@@ -91,7 +100,8 @@ SOCIETY_DB = {
             "facilities": ["Club House", "Security", "Garden"],
             "address": "Neemrana, Rajasthan",
             "lat": "27.9882",
-            "lon": "76.3844"
+            "lon": "76.3844",
+            "image": "societies/terra_heritage.jpg"
         },
 
         {
@@ -100,7 +110,8 @@ SOCIETY_DB = {
             "facilities": ["Park", "Security"],
             "address": "Alwar, Rajasthan",
             "lat": "27.5529",
-            "lon": "76.6346"
+            "lon": "76.6346",
+            "image": "societies/krish_vatika.jpg"
         },
 
         {
@@ -109,11 +120,11 @@ SOCIETY_DB = {
             "facilities": ["Garden", "Lift"],
             "address": "Bhiwadi, Rajasthan",
             "lat": "28.2100",
-            "lon": "76.8600"
+            "lon": "76.8600",
+            "image": "societies/trehan_delight.jpg"
         }
     ]
 }
-
 # ---------------------------
 # GET ADDRESS + MAP LINK
 # ---------------------------
@@ -434,9 +445,7 @@ def get_societies(city, predicted_price):
                 "map_link": location_data["map_link"],
 
                 # Society image
-                "image":
-                    f"https://picsum.photos/400/250?random={s['name']}",
-
+                "image": url_for('static', filename=s.get("image", "societies/default.jpg")),
                 # Nearby places
                 "schools": schools,
                 "hospitals": hospitals
@@ -521,9 +530,7 @@ def get_societies(city, predicted_price):
                     "address": location_data["address"],
                     "map_link": location_data["map_link"],
 
-                    "image":
-                        f"https://picsum.photos/400/250?random={s['name']}",
-
+                    "image": url_for('static', filename=s.get("image", "societies/default.jpg")),
                     "schools": schools,
                     "hospitals": hospitals
                 })
