@@ -576,7 +576,7 @@ def predict():
 
         }
 
-        df = pd.DataFrame([input_data])
+         df = pd.DataFrame([input_data])
 
         prediction = model.predict(df)[0]
 
