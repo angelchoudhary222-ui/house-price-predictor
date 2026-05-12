@@ -7,221 +7,423 @@
 <style>
 
 body{
-    font-family: 'Arial';
+    font-family:'Arial',sans-serif;
     margin:0;
-    background: #5959ec;
+
+    background:
+    linear-gradient(
+    135deg,
+    #5b21b6,
+    #7c3aed,
+    #6366f1
+    );
+
+    min-height:100vh;
+
+    -webkit-text-size-adjust:100%;
+    overflow-x:hidden;
 }
 
 /* HERO */
 .hero{
     text-align:center;
     color:white;
-    padding:40px 20px;
+    padding:25px 20px 10px;
 }
 
 .hero h1{
-    font-size:40px;
+    font-size:42px;
     margin-bottom:10px;
+    font-weight:bold;
 }
 
 .hero p{
     opacity:0.9;
+    font-size:17px;
 }
 
 /* MAIN CONTAINER */
 .container{
     max-width:1200px;
-    margin:40px auto;
+    margin:25px auto 50px;
+
     background:white;
+
     padding:35px;
-    border-radius:28px;
 
-    /* soft floating effect */
-    box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+    border-radius:32px;
 
-    /* smoother look */
-    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow:
+    0 20px 60px rgba(0,0,0,0.18);
+
+    border:1px solid rgba(255,255,255,0.3);
+
+    position:relative;
+
+    animation:fadeUp 0.7s ease;
 }
+
 /* FORM */
 form{
     margin-top:20px;
 }
 
-select, input{
+select,
+input{
     width:100%;
-    padding:12px;
+    padding:14px;
+
     margin:5px 0;
-    border-radius:10px;
+
+    border-radius:14px;
+
     border:1px solid #ddd;
+
+    font-size:15px;
+
+    transition:0.3s;
+
+    box-sizing:border-box;
 }
 
+select:focus,
+input:focus{
+    outline:none;
+    border:1px solid #7c3aed;
+
+    box-shadow:
+    0 0 0 4px rgba(124,58,237,0.15);
+}
+
+/* GRID */
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(200px,1fr));
+
     gap:15px;
 }
 
+/* BUTTON */
 button{
     width:100%;
-    padding:14px;
+
+    padding:15px;
+
     margin-top:10px;
+
     border:none;
-    border-radius:10px;
-    background:#7c3aed;
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(
+    90deg,
+    #7c3aed,
+    #9333ea
+    );
+
     color:white;
-    font-size:16px;
+
+    font-size:17px;
+
+    font-weight:bold;
+
     cursor:pointer;
+
+    transition:0.3s;
+
+    touch-action:manipulation;
 }
 
 button:hover{
-    background:#5b21b6;
+    transform:translateY(-2px);
+
+    background:
+    linear-gradient(
+    90deg,
+    #6d28d9,
+    #7e22ce
+    );
 }
 
 /* RESULT */
 .result{
     text-align:center;
-    margin-top:20px;
-    font-size:22px;
+
+    margin-top:25px;
+
+    font-size:28px;
+
     font-weight:bold;
+
     color:#5b21b6;
 }
 
 /* SOCIETY GRID */
 .dashboard{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
-    gap:20px;
-    margin-top:30px;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+
+    gap:25px;
+
+    margin-top:35px;
 }
 
 /* CARD */
 .card{
     background:white;
-    border-radius:16px;
+
+    border-radius:20px;
+
     overflow:hidden;
-    box-shadow:0 10px 25px rgba(0,0,0,0.1);
-    transition:0.3s;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.12);
+
+    transition:0.35s;
 }
 
 .card:hover{
-    transform:translateY(-8px);
+    transform:
+    translateY(-10px);
 }
 
 .card img{
     width:100%;
-    height:180px;
+
+    height:220px;
+
     object-fit:cover;
+}
+
+/* CARD CONTENT */
+.card-content{
+    padding:18px;
 }
 
 /* BADGE */
 .badge{
     background:#10b981;
+
     color:white;
-    padding:5px 10px;
+
+    padding:6px 12px;
+
     font-size:12px;
+
     border-radius:20px;
+
     display:inline-block;
+
     margin-top:10px;
 }
 
-/* CONTENT */
-.card-content{
-    padding:15px;
-}
-
+/* PRICE */
 .price{
     color:#7c3aed;
-    font-size:18px;
+
+    font-size:24px;
+
     font-weight:bold;
+
+    margin-top:12px;
 }
 
+/* ADDRESS */
 .address{
-    font-size:13px;
+    font-size:14px;
+
     color:gray;
+
+    line-height:1.6;
+
+    margin-top:10px;
 }
 
 /* TAGS */
 .tag{
     display:inline-block;
+
     background:#ede9fe;
-    padding:5px 8px;
-    margin:3px;
+
+    padding:6px 10px;
+
+    margin:4px;
+
     border-radius:12px;
-    font-size:11px;
+
+    font-size:12px;
 }
 
-/* BUTTON */
+/* MAP BUTTON */
 .map-btn{
     display:block;
+
     text-align:center;
-    margin-top:10px;
-    padding:10px;
+
+    margin-top:15px;
+
+    padding:12px;
+
     background:#7c3aed;
+
     color:white;
+
     text-decoration:none;
-    border-radius:10px;
+
+    border-radius:12px;
+
+    transition:0.3s;
 }
 
 .map-btn:hover{
     background:#5b21b6;
 }
 
-@media(max-width:768px){
-    .hero h1{font-size:28px;}
-}
+/* ANIMATION */
+@keyframes fadeUp{
 
-@media (max-width: 768px) {
-
-    body{
-        padding:10px;
+    from{
+        opacity:0;
+        transform:translateY(20px);
     }
 
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* MOBILE */
+@media (max-width:768px){
+
     .container{
-        margin:15px;
+        width:100%;
+
+        margin:0;
+
         padding:20px;
-        border-radius:20px;
+
+        border-radius:30px 30px 0 0;
+
+        box-sizing:border-box;
+    }
+
+    .hero{
+        padding:30px 15px 15px;
     }
 
     .hero h1{
-        font-size:24px;
+        font-size:30px;
+        line-height:1.3;
     }
 
     .hero p{
         font-size:14px;
     }
 
-    /* STACK GRID IN ONE COLUMN */
+    /* INPUT GRID */
     .grid{
-        grid-template-columns:1fr !important;
+        grid-template-columns:1fr;
+        gap:12px;
     }
 
-    /* SOCIETY CARDS FULL WIDTH */
-    .dashboard{
-        grid-template-columns:1fr !important;
-    }
-
-    /* INPUTS FULL WIDTH */
-    input, select{
+    input,
+    select,
+    button{
+        width:100%;
         font-size:16px;
     }
 
     button{
-        font-size:16px;
-        padding:12px;
+        padding:15px;
+    }
+
+    /* MOBILE CARDS */
+    .dashboard{
+        display:flex;
+        flex-direction:column;
+        gap:20px;
+    }
+
+    .card{
+        width:100%;
     }
 
     .card img{
-        height:160px;
+        height:230px;
+    }
+
+    .card-content{
+        padding:18px;
+    }
+
+    .price{
+        font-size:24px;
+    }
+
+    .address{
+        font-size:14px;
+    }
+
+    .result{
+        font-size:24px;
     }
 }
 
-body{
-    -webkit-text-size-adjust: 100%;
+/* FEATURES SECTION */
+.features{
+    max-width:1200px;
+
+    margin:40px auto 80px;
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(280px,1fr));
+
+    gap:25px;
+
+    padding:0 20px;
 }
 
-button, input, select{
-    touch-action: manipulation;
+.feature-card{
+    background:
+    rgba(255,255,255,0.12);
+
+    backdrop-filter:blur(10px);
+
+    border-radius:24px;
+
+    padding:30px;
+
+    color:white;
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,0.12);
+
+    transition:0.3s;
 }
+
+.feature-card:hover{
+    transform:translateY(-8px);
+}
+
+.feature-card h2{
+    margin-bottom:15px;
+    font-size:24px;
+}
+
+.feature-card p{
+    line-height:1.7;
+    opacity:0.9;
+}
+
+</style>
 
 </style>
 </head>
@@ -339,6 +541,38 @@ min="0" max="5" required>
 {% endif %}
 
 </div>
+
+<!-- FEATURES SECTION START -->
+
+<div class="features">
+
+    <div class="feature-card">
+        <h2>🤖 AI Prediction</h2>
+        <p>
+            Smart ML-based house price prediction
+            using real property features.
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <h2>🏢 Best Societies</h2>
+        <p>
+            Get recommended societies based
+            on your predicted budget.
+        </p>
+    </div>
+
+    <div class="feature-card">
+        <h2>📍 Prime Locations</h2>
+        <p>
+            Explore nearby schools, hospitals
+            and premium areas easily.
+        </p>
+    </div>
+
+</div>
+
+<!-- FEATURES SECTION END -->
 
 </body>
 </html>
