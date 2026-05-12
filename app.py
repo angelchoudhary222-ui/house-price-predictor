@@ -2,6 +2,11 @@ from flask import Flask, render_template, request, url_for
 import pickle
 import pandas as pd
 import requests
+import os
+import os
+
+
+
 
 app = Flask(__name__)
 
@@ -558,7 +563,7 @@ def predict():
         city = request.form["city"]
 
         input_data = {
-
+            "city": city,  # ✅ ADD THIS LINE
             "area": float(request.form["area"]),
             "bedrooms": int(request.form["bedrooms"]),
             "bathrooms": int(request.form["bathrooms"]),
@@ -571,24 +576,20 @@ def predict():
             "parking": int(request.form["parking"]),
             "prefarea": request.form["prefarea"],
             "furnishingstatus": request.form["furnishingstatus"]
+
         }
 
         df = pd.DataFrame([input_data])
 
         prediction = model.predict(df)[0]
 
-        # ---------------------------
-        # BALANCE PREDICTION
-        # ---------------------------
+        # balance logic
         if prediction > 30000000:
             prediction *= 0.45
-
         elif prediction > 20000000:
             prediction *= 0.60
-
         elif prediction > 12000000:
             prediction *= 0.75
-
         elif prediction < 1000000:
             prediction *= 1.5
 
@@ -596,10 +597,12 @@ def predict():
 
         societies = get_societies(city, prediction)
 
+
         return render_template(
             "index.html",
             prediction_text=f"₹ {prediction:,}",
-            societies=societies
+            societies=societies,
+
         )
 
     except Exception as e:
@@ -609,7 +612,6 @@ def predict():
             prediction_text=f"Error: {str(e)}",
             societies=None
         )
-
 
 if __name__ == "__main__":
     app.run(debug=True)
