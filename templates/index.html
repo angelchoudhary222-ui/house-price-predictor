@@ -464,19 +464,19 @@ min="1" max="5" required>
 
 <div class="grid">
 
-<select name="mainroad">
+<select name="mainroad" required>
 <option disabled selected>Main Road</option>
 <option value="yes">Yes</option>
 <option value="no">No</option>
 </select>
 
-<select name="guestroom">
+<select name="guestroom" required>
 <option disabled selected>Guest Room</option>
 <option value="yes">Yes</option>
 <option value="no">No</option>
 </select>
 
-<select name="basement">
+<select name="basement" required>
 <option disabled selected>Basement</option>
 <option value="yes">Yes</option>
 <option value="no">No</option>
@@ -484,6 +484,35 @@ min="1" max="5" required>
 
 <input name="parking" type="number" placeholder="Parking Spaces"
 min="0" max="5" required>
+
+</div>
+
+<div class="grid">
+
+<select name="hotwaterheating" required>
+<option disabled selected>Hot Water Heating</option>
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
+
+<select name="airconditioning" required>
+<option disabled selected>Air Conditioning</option>
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
+
+<select name="prefarea" required>
+<option disabled selected>City Center</option>
+<option value="yes">Yes</option>
+<option value="no">No</option>
+</select>
+
+<select name="furnishingstatus" required>
+<option disabled selected>Furnishing</option>
+<option value="furnished">Furnished</option>
+<option value="semi-furnished">Semi Furnished</option>
+<option value="unfurnished">Unfurnished</option>
+</select>
 
 </div>
 
